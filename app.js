@@ -12,6 +12,7 @@ const textArea = document.querySelector('#adoptForm textarea');
 //catch input and display it in a pop-up
 adoptForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
+
     alert(`Thank you for caring about cats! We have received your message and will get back to you shortly.
     
     *********************
@@ -27,7 +28,25 @@ adoptForm.addEventListener('submit', function (evt) {
     *********************
     
     You can close this window.`);
+    //after this popup alert, clear the inputs:
+    inputName.value = '';
+    inputEMail.value = '';
+    textArea.value = '';
 })
+
+//check if input for name & email is valid and apply .notValid class from CSS sheet if not
+function checkIfValid(evt) {
+    let input = evt.target;
+    if (!input.checkValidity()) {
+        input.classList.add('notValid');
+    } else {
+        input.classList.remove('notValid');
+    }
+}
+
+inputName.addEventListener('input', checkIfValid);
+inputEMail.addEventListener('input', checkIfValid);
+
 /*whenever the "adopt me" button is clicked, the corresponding cat name
 will be fetched and directly input into the adopt form */
 
@@ -37,7 +56,7 @@ for (let buttons of adoptButton) {
         let catDiv = evt.target.parentElement;
         let nameParagraph = catDiv.querySelector('p:first-of-type');
         let catName = nameParagraph.textContent.split(': ')[1]; //got this from ChatGPT
-        textArea.innerText = `I would like to adopt ${catName}`;
+        textArea.value = `I would like to adopt ${catName}`;
         window.location.hash = ''; //got this from ChatGPT, this resets the hash to make it possible to perform the jump to the adoptForm more than once
         window.location.hash = 'adoptForm'; //jump to the adoptForm
     });
